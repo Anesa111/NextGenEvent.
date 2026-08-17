@@ -6,7 +6,8 @@
     <title>Next Gen Event | 3x3 Basketball Official Platform</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;600;700&family=Noto+Sans+Georgian:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -259,9 +260,9 @@
                         <h3 class="font-teko text-4xl font-bold text-white mb-2">U16 კატეგორია</h3>
                         <p class="text-xs text-gray-400 mb-6">16 წლამდე ასაკის პერსპექტიული მოთამაშეების ტურნირი</p>
                     </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1-KcwfolV2kYuUQDK3Zf4PjaDEoUcN_NDb5XYToq-8Ek/edit?usp=drivesdk" target="_blank" class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl text-center shadow-lg shadow-brand-orange/20 transition-colors flex items-center justify-center gap-2">
-                        რეგისტრაცია <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
+                   <button onclick="openRegistrationModal('U16')" class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl text-center shadow-lg shadow-brand-orange/20 transition-colors flex items-center justify-center gap-2">
+    რეგისტრაცია
+</button>
                 </div>
 
                 <!-- U18 Card -->
@@ -274,9 +275,9 @@
                         <h3 class="font-teko text-4xl font-bold text-white mb-2">U18 კატეგორია</h3>
                         <p class="text-xs text-gray-400 mb-6">18 წლამდე ასაკის ახალგაზრდა ვარსკვლავების ჩემპიონატი</p>
                     </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1DPiGXNvf8zPl-q85SwJyfDU9y7j9OXAJNr9kZhPYauo/edit?usp=drivesdk" target="_blank" class="w-full py-3 bg-brand-gold hover:bg-yellow-600 text-black font-bold text-xs uppercase tracking-widest rounded-xl text-center shadow-lg transition-colors flex items-center justify-center gap-2">
-                        რეგისტრაცია <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
+                    <button onclick="openRegistrationModal('U18')" class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl text-center shadow-lg shadow-brand-orange/20 transition-colors flex items-center justify-center gap-2">
+    რეგისტრაცია
+</button>
                 </div>
 
                 <!-- +18 Card -->
@@ -289,9 +290,9 @@
                         <h3 class="font-teko text-4xl font-bold text-white mb-2">+18 კატეგორია</h3>
                         <p class="text-xs text-gray-400 mb-6">ზრდასრულთა ძირითადი და უმაღლესი კონკურენციის ლიგა</p>
                     </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1oLcGqxj_sTaN_1csmpTEdXEnvEYR4xUb3pnO2aAsw5Y/edit?usp=drivesdk" target="_blank" class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl text-center shadow-lg shadow-brand-orange/20 transition-colors flex items-center justify-center gap-2">
-                        რეგისტრაცია <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
+                    <button onclick="openRegistrationModal('+18')" class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl text-center shadow-lg shadow-brand-orange/20 transition-colors flex items-center justify-center gap-2">
+    რეგისტრაცია
+</button>
                 </div>
 
                 <!-- Women Card -->
@@ -304,9 +305,9 @@
                         <h3 class="font-teko text-4xl font-bold text-white mb-2">Women კატეგორია</h3>
                         <p class="text-xs text-gray-400 mb-6">ქალბატონთა ტურნირი უმაღლესი ტიტულის მოსაპოვებლად</p>
                     </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1_JRmMPovcnK4j4eOXp55EUU6riR9k2SK8IoOBDpqsN8/edit?usp=drivesdk" target="_blank" class="w-full py-3 bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs uppercase tracking-widest rounded-xl text-center shadow-lg transition-colors flex items-center justify-center gap-2">
-                        რეგისტრაცია <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
+                    <button onclick="openRegistrationModal('Women')" class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl text-center shadow-lg shadow-brand-orange/20 transition-colors flex items-center justify-center gap-2">
+    რეგისტრაცია
+</button>
                 </div>
             </div>
         </div>
@@ -571,7 +572,91 @@
             </form>
         </div>
     </div>
+<!-- Registration Modal -->
+<div id="registration-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="glass-card max-w-lg w-full p-8 rounded-2xl relative border border-brand-orange/40 max-h-[90vh] overflow-y-auto">
+        <button type="button" onclick="closeRegistrationModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
 
+        <h3 class="font-teko text-4xl font-bold text-white uppercase mb-6">
+            რეგისტრაცია
+        </h3>
+
+        <form onsubmit="submitRegistration(event)" class="space-y-4">
+            <input type="hidden" id="registration-category">
+
+            <div>
+                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
+                    კატეგორია
+                </label>
+                <input type="text" id="registration-category-display" readonly
+                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
+            </div>
+
+            <div>
+                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
+                    გუნდის სახელი
+                </label>
+                <input type="text" id="registration-team" required
+                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
+            </div>
+
+            <div>
+                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
+                    მოთამაშე 1
+                </label>
+                <input type="text" id="registration-player1" required
+                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
+            </div>
+
+            <div>
+                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
+                    მოთამაშე 2
+                </label>
+                <input type="text" id="registration-player2" required
+                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
+            </div>
+
+            <div>
+                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
+                    მოთამაშე 3
+                </label>
+                <input type="text" id="registration-player3" required
+                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
+            </div>
+
+            <div>
+                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
+                    მოთამაშე 4
+                </label>
+                <input type="text" id="registration-player4" required
+                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
+            </div>
+
+            <div>
+                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
+                    ელფოსტა
+                </label>
+                <input type="email" id="registration-email" required
+                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
+            </div>
+
+            <div>
+                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
+                    ტელეფონი
+                </label>
+                <input type="tel" id="registration-phone" required
+                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
+            </div>
+
+            <button type="submit"
+                class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all mt-4">
+                რეგისტრაციის გაგზავნა
+            </button>
+        </form>
+    </div>
+</div>
     <!-- ==================== JAVASCRIPT LOGIC ==================== -->
     <script>
         // 1. Loading Screen Animation
@@ -590,12 +675,17 @@
         }
 
         // 2. Initial Player Data (Stored in LocalStorage for Admin Editing)
-        const initialPlayers = [
-            { id: 1, name: "გიორგი მაისურაძე", pts: 84, wins: 12, losses: 2, gp: 14 },
-            { id: 2, name: "ნიკა კაპანაძე", pts: 72, wins: 10, losses: 3, gp: 13 },
-            { id: 3, name: "დავით ბერიძე", pts: 65, wins: 9, losses: 4, gp: 13 },
-            { id: 4, name: "ლუკა ქურდაძე", pts: 58, wins: 8, losses: 5, gp: 13 },
-            { id: 5, name: "სანდრო ჯაფარიძე", pts: 49, wins: 7, losses: 4, gp: 11 }
+        const SUPABASE_URL = "https://urpsyylhhawzfhjrktcx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_2O1_m1NQgq3801jlw5yL-g_agtsZKoV";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+const initialPlayers = [
+   
+            
         ];
 
         let players = JSON.parse(localStorage.getItem('nextgen_players')) || initialPlayers;
@@ -694,7 +784,43 @@
         function closePlayerModal() {
             document.getElementById('player-modal').classList.add('hidden');
         }
+function openRegistrationModal(category) {
+    document.getElementById('registration-category').value = category;
+    document.getElementById('registration-category-display').value = category;
+    document.getElementById('registration-modal').classList.remove('hidden');
+}
 
+function closeRegistrationModal() {
+    document.getElementById('registration-modal').classList.add('hidden');
+}
+
+async function submitRegistration(event) {
+    event.preventDefault();
+
+    const { error } = await supabaseClient
+        .from('registrations')
+        .insert([{
+            category: document.getElementById('registration-category').value,
+            team_name: document.getElementById('registration-team').value,
+            player1: document.getElementById('registration-player1').value,
+            player2: document.getElementById('registration-player2').value,
+            player3: document.getElementById('registration-player3').value,
+            player4: document.getElementById('registration-player4').value,
+            email: document.getElementById('registration-email').value,
+            phone: document.getElementById('registration-phone').value,
+            status: 'pending'
+        }]);
+
+    if (error) {
+        alert('რეგისტრაცია ვერ გაიგზავნა. სცადე თავიდან.');
+        console.error(error);
+        return;
+    }
+
+    alert('რეგისტრაცია წარმატებით გაიგზავნა!');
+    closeRegistrationModal();
+    event.target.reset();
+}
         function savePlayer(e) {
             e.preventDefault();
             const id = document.getElementById('player-id').value;
