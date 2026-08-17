@@ -812,7 +812,7 @@ async function submitRegistration(event) {
         }]);
 
     if (error) {
-        alert('რეგისტრაცია ვერ გაიგზავნა. სცადე თავიდან.');
+        alert('Supabase error: ' + error.message);
         console.error(error);
         return;
     }
