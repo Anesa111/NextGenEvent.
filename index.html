@@ -520,7 +520,10 @@
             <p class="text-xs text-gray-400 mb-6">შედით ადმინისტრატორის პაროლით სტატისტიკის სამართავად</p>
             
             <form onsubmit="handleAdminLogin(event)" class="space-y-4">
-                <div>
+             <div>
+    <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-2">ელფოსტა</label>
+    <input type="email" id="admin-email" required placeholder="შეიყვანეთ ელფოსტა..." class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white focus:outline-none focus:border-brand-orange text-sm">
+</div>   <div>
                     <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-2">პაროლი</label>
                     <input type="password" id="admin-pass" required placeholder="შეიყვანეთ პაროლი..." class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white focus:outline-none focus:border-brand-orange text-sm">
                 </div>
@@ -739,23 +742,33 @@ const initialPlayers = [
             document.getElementById('admin-modal').classList.toggle('hidden');
         }
 
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            const pass = document.getElementById('admin-pass').value;
-            // Default Demo Admin Password
-            if (pass === "nextgen2026") {
-                isAdmin = true;
-                document.getElementById('admin-error').classList.add('hidden');
-                document.getElementById('add-player-btn').classList.remove('hidden');
-                document.getElementById('admin-header').classList.remove('hidden');
-                toggleAdminModal();
-                renderPlayersTable();
-                alert("წარმატებული ავტორიზაცია! თქვენ გაქვთ Host/Admin წვდომა.");
-            } else {
-                document.getElementById('admin-error').classList.remove('hidden');
-            }
-        }
+       async function handleAdminLogin(e) {
+    e.preventDefault();
 
+    const email = document.getElementById('admin-email').value;
+    const password = document.getElementById('admin-pass').value;
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+
+    if (error) {
+        document.getElementById('admin-error').innerText = "არასწორი ელფოსტა ან პაროლი!";
+        document.getElementById('admin-error').classList.remove('hidden');
+        return;
+    }
+
+    isAdmin = true;
+    document.getElementById('admin-error').classList.add('hidden');
+    document.getElementById('add-player-btn').classList.remove('hidden');
+    document.getElementById('admin-header').classList.remove('hidden');
+
+    toggleAdminModal();
+    renderPlayersTable();
+
+    alert("წარმატებული ავტორიზაცია! თქვენ გაქვთ Host/Admin წვდომა.");
+}
         // 4. Admin CRUD Actions (Add/Edit/Delete)
         function openAddPlayerModal() {
             document.getElementById('modal-title').innerText = "ახალი მოთამაშის დამატება";
