@@ -742,21 +742,11 @@ const initialPlayers = [
             document.getElementById('admin-modal').classList.toggle('hidden');
         }
 
-       async function handleAdminLogin(e) {
-    e.preventDefault();
+       async function handleAdminLogin(e) {if (email !== "nikatyupi13@gmail.com" || password !== "გნგნ1818") {
+    document.getElementById('admin-error').innerText = "არასწორი ელფოსტა ან პაროლი!";
+    document.getElementById('admin-error').classList.remove('hidden');
+    return;
 
-    const email = document.getElementById('admin-email').value;
-    const password = document.getElementById('admin-pass').value;
-
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-    });
-
-    if (error) {
-        document.getElementById('admin-error').innerText = "არასწორი ელფოსტა ან პაროლი!";
-        document.getElementById('admin-error').classList.remove('hidden');
-        return;
     }
 
     isAdmin = true;
