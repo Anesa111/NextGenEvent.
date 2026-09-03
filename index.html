@@ -1,876 +1,258 @@
 <!DOCTYPE html>
 <html lang="ka">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Next Gen Event | 3x3 Basketball Official Platform</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;600;700&family=Noto+Sans+Georgian:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Lucide / Custom Styles -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            orange: '#FF5500',
-                            orangeDark: '#D44000',
-                            gold: '#FFB800',
-                            dark: '#0B0E14',
-                            card: '#151922',
-                            cardBorder: '#232936'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Noto Sans Georgian', 'sans-serif'],
-                        teko: ['Teko', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            background-color: #0B0E14;
-            color: #FFFFFF;
-            overflow-x: hidden;
-        }
-
-        /* Basketball Court Pattern Background */
-        .court-bg {
-            background-image: radial-gradient(rgba(255, 85, 0, 0.12) 1px, transparent 0);
-            background-size: 28px 28px;
-        }
-
-        .court-lines {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255, 85, 0, 0.05) 0%, transparent 100%);
-            pointer-events: none;
-        }
-
-        /* Glassmorphism Cards */
-        .glass-card {
-            background: rgba(21, 25, 34, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .glass-card:hover {
-            border-color: rgba(255, 85, 0, 0.5);
-            transform: translateY(-4px);
-            box-shadow: 0 10px 30px -10px rgba(255, 85, 0, 0.3);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0B0E14;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #FF5500;
-            border-radius: 4px;
-        }
-
-        /* Ball Rotation Animation */
-        @keyframes spinSlow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .animate-spin-slow {
-            animation: spinSlow 8s linear infinite;
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 15px rgba(255, 85, 0, 0.8)); }
-            50% { opacity: 0.8; filter: drop-shadow(0 0 35px rgba(255, 85, 0, 1)); }
-        }
-        .pulse-glow {
-            animation: pulseGlow 3s ease-in-out infinite;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NextGen Event | 3x3 Basketball</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="court-bg font-sans antialiased selection:bg-brand-orange selection:text-white">
+<body class="bg-gray-900 text-white font-sans antialiased">
 
-    <!-- ==================== 1. LOADING SCREEN ==================== -->
-    <div id="loading-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#07090D] transition-opacity duration-700">
-        <div class="relative flex items-center justify-center">
-            <!-- Outer Glowing Ring -->
-            <div class="w-40 h-40 rounded-full border-4 border-brand-orange/20 border-t-brand-orange animate-spin"></div>
-            <!-- 3x3 Basketball Icon -->
-            <div class="absolute animate-spin-slow">
-                <i class="fa-solid fa-basketball text-6xl text-brand-orange"></i>
-            </div>
-        </div>
-        <h2 class="mt-8 font-teko text-4xl font-bold tracking-widest text-white uppercase">
-            NEXT GEN <span class="text-brand-orange">EVENT</span>
-        </h2>
-        <p class="mt-2 text-sm text-gray-400 uppercase tracking-widest flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-brand-orange animate-ping"></span>
-            3x3 Basketball Loading...
-        </p>
+  <!-- Header / Navigation -->
+  <header class="border-b border-gray-800 bg-gray-950/80 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <span class="text-xl font-black tracking-wider text-orange-500">NEXTGEN</span>
+        <span class="text-xs text-gray-400 uppercase tracking-widest border-l border-gray-700 pl-3">3x3 Basketball</span>
+      </div>
+      <nav class="hidden md:flex space-x-6 text-sm font-semibold uppercase text-gray-300">
+        <a href="#about" class="hover:text-orange-500 transition">ჩვენ შესახებ</a>
+        <a href="#stats" class="hover:text-orange-500 transition">სტატისტიკა</a>
+        <a href="#register" class="hover:text-orange-500 transition">რეგისტრაცია</a>
+      </nav>
+      <button onclick="toggleAdminModal()" class="bg-gray-800 hover:bg-gray-700 text-xs text-gray-300 font-bold px-4 py-2 rounded-lg border border-gray-700 transition">
+        <i class="fa-solid fa-lock mr-1"></i> Host Login
+      </button>
     </div>
+  </header>
 
-    <!-- ==================== HEADER / NAVIGATION ==================== -->
-    <header class="sticky top-0 z-40 bg-[#0B0E14]/90 backdrop-blur-md border-b border-brand-cardBorder">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Logo -->
-            <a href="#" class="flex items-center gap-3 group">
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-orange to-brand-orangeDark p-0.5 shadow-lg shadow-brand-orange/20">
-                    <div class="w-full h-full bg-brand-dark rounded-[10px] flex items-center justify-center group-hover:bg-transparent transition-colors">
-                        <i class="fa-solid fa-basketball text-2xl text-brand-orange group-hover:text-white transition-colors"></i>
-                    </div>
-                </div>
-                <div>
-                    <span class="font-teko text-3xl font-bold leading-none tracking-wide text-white block">
-                        NEXT GEN <span class="text-brand-orange">EVENT</span>
-                    </span>
-                    <span class="text-[10px] text-gray-400 tracking-widest block uppercase font-semibold">3x3 Basketball Official</span>
-                </div>
-            </a>
+  <!-- Hero Section -->
+  <section class="max-w-6xl mx-auto px-4 py-16 text-center">
+    <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
+      NEXTGEN <span class="text-orange-500">3x3</span> TOURNAMENT
+    </h1>
+    <p class="text-gray-400 max-w-2xl mx-auto mb-8">
+      დარეგისტრირდით ტურნირზე, ედევნეთ თვალი ცოცხალ სტატისტიკას და გახდით ჩემპიონატის ნაწილი!
+    </p>
+    <a href="#register" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3 rounded-xl transition inline-block">
+      გუნდის დარეგისტრირება
+    </a>
+  </section>
 
-            <!-- Desktop Nav Links -->
-            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold uppercase tracking-wider">
-                <a href="#about" class="text-gray-300 hover:text-brand-orange transition-colors">ჩვენ შესახებ</a>
-                <a href="#registration" class="text-gray-300 hover:text-brand-orange transition-colors">რეგისტრაცია</a>
-                <a href="#stats" class="text-gray-300 hover:text-brand-orange transition-colors">სტატისტიკა</a>
-                <a href="#donation" class="text-gray-300 hover:text-brand-orange transition-colors">მხარდაჭერა</a>
-                <a href="#contact" class="text-gray-300 hover:text-brand-orange transition-colors">კონტაქტი</a>
-            </nav>
-
-            <!-- CTA / Admin Login Button -->
-            <div class="hidden md:flex items-center gap-4">
-                <button onclick="toggleAdminModal()" class="px-4 py-2 text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white border border-gray-700 hover:border-brand-orange rounded-lg transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-lock"></i> Host Login
-                </button>
-                <a href="#registration" class="px-6 py-2.5 bg-gradient-to-r from-brand-orange to-brand-orangeDark hover:from-brand-orangeDark hover:to-brand-orange text-white font-bold text-sm uppercase tracking-wider rounded-lg shadow-lg shadow-brand-orange/30 transform hover:-translate-y-0.5 transition-all">
-                    რეგისტრაცია
-                </a>
-            </div>
-
-            <!-- Mobile Menu Toggle Button -->
-            <button onclick="toggleMobileMenu()" class="md:hidden text-gray-300 hover:text-white text-2xl p-2">
-                <i class="fa-solid fa-bars" id="menu-icon"></i>
-            </button>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-brand-card border-b border-brand-cardBorder px-6 py-6 space-y-4">
-            <a href="#about" onclick="toggleMobileMenu()" class="block text-gray-300 hover:text-brand-orange font-semibold uppercase tracking-wider">ჩვენ შესახებ</a>
-            <a href="#registration" onclick="toggleMobileMenu()" class="block text-gray-300 hover:text-brand-orange font-semibold uppercase tracking-wider">რეგისტრაცია</a>
-            <a href="#stats" onclick="toggleMobileMenu()" class="block text-gray-300 hover:text-brand-orange font-semibold uppercase tracking-wider">სტატისტიკა</a>
-            <a href="#donation" onclick="toggleMobileMenu()" class="block text-gray-300 hover:text-brand-orange font-semibold uppercase tracking-wider">მხარდაჭერა</a>
-            <a href="#contact" onclick="toggleMobileMenu()" class="block text-gray-300 hover:text-brand-orange font-semibold uppercase tracking-wider">კონტაქტი</a>
-            <div class="pt-4 border-t border-gray-800 flex flex-col gap-3">
-                <button onclick="toggleAdminModal(); toggleMobileMenu();" class="w-full py-2.5 text-center text-xs font-bold uppercase tracking-wider text-gray-300 border border-gray-700 rounded-lg">
-                    <i class="fa-solid fa-lock"></i> Host Login
-                </button>
-                <a href="#registration" onclick="toggleMobileMenu()" class="w-full py-3 bg-brand-orange text-center text-white font-bold uppercase tracking-wider rounded-lg">
-                    რეგისტრაცია
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- ==================== HERO SECTION ==================== -->
-    <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden py-20">
-        <!-- Background Elements -->
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#0B0E14]/80 to-[#0B0E14] z-10"></div>
-        <div class="absolute -top-32 -right-32 w-96 h-96 bg-brand-orange/20 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-brand-gold/10 rounded-full blur-3xl pointer-events-none"></div>
-
-        <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <!-- Tagline Badge -->
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-orange/10 border border-brand-orange/30 text-brand-orange text-xs sm:text-sm font-bold tracking-widest uppercase mb-8 pulse-glow">
-                <i class="fa-solid fa-trophy"></i>
-                Official Next Gen 3x3 Basketball League
-            </div>
-
-            <h1 class="font-teko text-6xl sm:text-8xl md:text-9xl font-extrabold uppercase tracking-tight leading-none mb-6">
-                NEXT GEN <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange via-brand-gold to-brand-orange">EVENT</span>
-            </h1>
-
-            <p class="max-w-2xl mx-auto text-gray-300 text-base sm:text-xl font-normal leading-relaxed mb-10">
-                პლატფორმა შექმნილია ახალგაზრდა, ამბიციური სპორტსმენებისთვის. მიიღე მონაწილეობა 3x3 კალათბურთის ტურნირებში, აჩვენე შენი შესაძლებლობები და გახდი ლიგის საუკეთესო მოთამაშე!
-            </p>
-
-            <!-- Call-To-Action Buttons -->
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-                <a href="#registration" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-brand-orange to-brand-orangeDark hover:from-brand-orangeDark hover:to-brand-orange text-white font-extrabold text-base uppercase tracking-wider rounded-xl shadow-xl shadow-brand-orange/30 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3">
-                    <i class="fa-solid fa-pen-to-square"></i> ტურნირზე რეგისტრაცია
-                </a>
-                <a href="#stats" class="w-full sm:w-auto px-8 py-4 bg-brand-card hover:bg-brand-cardBorder text-white font-extrabold text-base uppercase tracking-wider rounded-xl border border-gray-700 hover:border-brand-orange hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3">
-                    <i class="fa-solid fa-chart-simple"></i> სტატისტიკა & რეიტინგი
-                </a>
-            </div>
-
-            <!-- Scoreboard Highlight Feature -->
-            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-                <div class="glass-card p-4 rounded-xl text-center">
-                    <div class="font-teko text-4xl text-brand-orange font-bold">4</div>
-                    <div class="text-xs text-gray-400 uppercase tracking-widest">კატეგორია</div>
-                </div>
-                <div class="glass-card p-4 rounded-xl text-center">
-                    <div class="font-teko text-4xl text-brand-gold font-bold">3X3</div>
-                    <div class="text-xs text-gray-400 uppercase tracking-widest">ოფიციალური ფორმატი</div>
-                </div>
-                <div class="glass-card p-4 rounded-xl text-center">
-                    <div class="font-teko text-4xl text-brand-orange font-bold">LIVE</div>
-                    <div class="text-xs text-gray-400 uppercase tracking-widest">ლიგის სტატისტიკა</div>
-                </div>
-                <div class="glass-card p-4 rounded-xl text-center">
-                    <div class="font-teko text-4xl text-brand-gold font-bold">100%</div>
-                    <div class="text-xs text-gray-400 uppercase tracking-widest">სპორტული ენერგია</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================== 2. REGISTRATION SECTION ==================== -->
-    <section id="registration" class="py-20 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Section Title -->
-            <div class="text-center mb-16">
-                <h2 class="font-teko text-5xl sm:text-7xl font-bold uppercase tracking-wider text-white">
-                    ტურნირზე <span class="text-brand-orange">რეგისტრაცია</span>
-                </h2>
-                <p class="text-gray-400 max-w-xl mx-auto text-sm sm:text-base">
-                    აირჩიეთ თქვენი ასაკობრივი ან გენდერული ჯგუფი და დარეგისტრირდით 3x3 ტურნირზე მარტივად
-                </p>
-                <div class="w-24 h-1 bg-brand-orange mx-auto mt-4 rounded-full"></div>
-            </div>
-
-            <!-- Category Grid Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-                <!-- U16 Card -->
-                <div class="glass-card rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-brand-orange/10 rounded-bl-full group-hover:scale-110 transition-transform"></div>
-                    <div>
-                        <div class="w-14 h-14 rounded-xl bg-brand-orange/20 flex items-center justify-center text-brand-orange text-2xl mb-6">
-                            <i class="fa-solid fa-child"></i>
-                        </div>
-                        <h3 class="font-teko text-4xl font-bold text-white mb-2">U16 კატეგორია</h3>
-                        <p class="text-xs text-gray-400 mb-6">16 წლამდე ასაკის პერსპექტიული მოთამაშეების ტურნირი</p>
-                    </div>
-                   <button onclick="openRegistrationModal('U16')" class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl text-center shadow-lg shadow-brand-orange/20 transition-colors flex items-center justify-center gap-2">
-    რეგისტრაცია
-</button>
-                </div>
-
-                <!-- U18 Card -->
-                <div class="glass-card rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-brand-gold/10 rounded-bl-full group-hover:scale-110 transition-transform"></div>
-                    <div>
-                        <div class="w-14 h-14 rounded-xl bg-brand-gold/20 flex items-center justify-center text-brand-gold text-2xl mb-6">
-                            <i class="fa-solid fa-user-graduate"></i>
-                        </div>
-                        <h3 class="font-teko text-4xl font-bold text-white mb-2">U18 კატეგორია</h3>
-                        <p class="text-xs text-gray-400 mb-6">18 წლამდე ასაკის ახალგაზრდა ვარსკვლავების ჩემპიონატი</p>
-                    </div>
-                    <button onclick="openRegistrationModal('U18')" class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl text-center shadow-lg shadow-brand-orange/20 transition-colors flex items-center justify-center gap-2">
-    რეგისტრაცია
-</button>
-                </div>
-
-                <!-- +18 Card -->
-                <div class="glass-card rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-brand-orange/10 rounded-bl-full group-hover:scale-110 transition-transform"></div>
-                    <div>
-                        <div class="w-14 h-14 rounded-xl bg-brand-orange/20 flex items-center justify-center text-brand-orange text-2xl mb-6">
-                            <i class="fa-solid fa-user-check"></i>
-                        </div>
-                        <h3 class="font-teko text-4xl font-bold text-white mb-2">+18 კატეგორია</h3>
-                        <p class="text-xs text-gray-400 mb-6">ზრდასრულთა ძირითადი და უმაღლესი კონკურენციის ლიგა</p>
-                    </div>
-                    <button onclick="openRegistrationModal('+18')" class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl text-center shadow-lg shadow-brand-orange/20 transition-colors flex items-center justify-center gap-2">
-    რეგისტრაცია
-</button>
-                </div>
-
-                <!-- Women Card -->
-                <div class="glass-card rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-pink-500/10 rounded-bl-full group-hover:scale-110 transition-transform"></div>
-                    <div>
-                        <div class="w-14 h-14 rounded-xl bg-pink-500/20 flex items-center justify-center text-pink-500 text-2xl mb-6">
-                            <i class="fa-solid fa-person-dress"></i>
-                        </div>
-                        <h3 class="font-teko text-4xl font-bold text-white mb-2">Women კატეგორია</h3>
-                        <p class="text-xs text-gray-400 mb-6">ქალბატონთა ტურნირი უმაღლესი ტიტულის მოსაპოვებლად</p>
-                    </div>
-                    <button onclick="openRegistrationModal('Women')" class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl text-center shadow-lg shadow-brand-orange/20 transition-colors flex items-center justify-center gap-2">
-    რეგისტრაცია
-</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================== 6 & 7. STATISTICS DASHBOARD & ADMIN CONTROL ==================== -->
-    <section id="stats" class="py-20 relative bg-[#07090D]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-                <div>
-                    <h2 class="font-teko text-5xl sm:text-7xl font-bold uppercase tracking-wider text-white">
-                        მოთამაშეების <span class="text-brand-orange">სტატისტიკა</span>
-                    </h2>
-                    <p class="text-gray-400 text-sm sm:text-base">Next Gen Event-ის მიმდინარე რეიტინგი და შედეგები</p>
-                </div>
-
-                <!-- Search & Filters -->
-                <div class="flex flex-wrap items-center gap-4">
-                    <div class="relative">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                        <input type="text" id="player-search" oninput="renderPlayersTable()" placeholder="მოძებნე მოთამაშე..." class="bg-brand-card border border-brand-cardBorder rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-brand-orange w-64">
-                    </div>
-                    <!-- Admin Controls Button (If Authenticated) -->
-                    <button id="add-player-btn" onclick="openAddPlayerModal()" class="hidden px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center gap-2">
-                        <i class="fa-solid fa-plus"></i> მოთამაშის დამატება
-                    </button>
-                </div>
-            </div>
-
-            <!-- Scoreboard Table Container -->
-            <div class="glass-card rounded-2xl overflow-hidden border border-brand-cardBorder">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-brand-card border-b border-brand-cardBorder text-gray-400 text-xs uppercase font-bold tracking-widest">
-                                <th class="p-4 sm:p-6">RANK</th>
-                                <th class="p-4 sm:p-6">PLAYER</th>
-                                <th class="p-4 sm:p-6 text-center">PTS (ქულა)</th>
-                                <th class="p-4 sm:p-6 text-center">W (მოგება)</th>
-                                <th class="p-4 sm:p-6 text-center">L (წაგება)</th>
-                                <th class="p-4 sm:p-6 text-center">GP (თამაში)</th>
-                                <th id="admin-header" class="hidden p-4 sm:p-6 text-right">მოქმედება</th>
-                            </tr>
-                        </thead>
-                        <tbody id="players-table-body" class="divide-y divide-brand-cardBorder text-sm sm:text-base font-semibold">
-                            <!-- JS Generated Rows -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================== 8. ABOUT US / INFO SECTION ==================== -->
-    <section id="about" class="py-20 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-brand-orange/10 text-brand-orange text-xs font-bold uppercase tracking-widest mb-4">
-                        ორგანიზაციის შესახებ
-                    </div>
-                    <h2 class="font-teko text-5xl sm:text-6xl font-bold uppercase tracking-wide text-white mb-6">
-                        ჩვენ ვქმნით <span class="text-brand-orange">კალათბურთის მომავალს</span>
-                    </h2>
-                    <p class="text-gray-300 leading-relaxed mb-6">
-                        **Next Gen Event** არის ინოვაციური სპორტული პლატფორმა, რომლის მთავარი მიზანია 3x3 კალათბურთის პოპულარიზაცია და ახალგაზრდა სპორტსმენების მხარდაჭერა.
-                    </p>
-                    <p class="text-gray-300 leading-relaxed mb-8">
-                        ჩვენ ვაორგანიზებთ მაღალი დონის ტურნირებს სხვადასხვა ასაკობრივ კატეგორიებში, სადაც თითოეულ მოთამაშეს ეძლევა შანსი აჩვენოს საკუთარი ტალანტი და მიაღწიოს წარმატებას.
-                    </p>
-
-                    <div class="grid grid-cols-2 gap-6 pt-4 border-t border-brand-cardBorder">
-                        <div>
-                            <span class="font-teko text-4xl font-bold text-brand-orange block">3x3 FIBA</span>
-                            <span class="text-xs text-gray-400 uppercase">სტანდარტების დაცვა</span>
-                        </div>
-                        <div>
-                            <span class="font-teko text-4xl font-bold text-brand-gold block">PRO</span>
-                            <span class="text-xs text-gray-400 uppercase">ორგანიზება & მსაჯობა</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Graphic Decorative Card -->
-                <div class="glass-card rounded-3xl p-8 relative overflow-hidden flex flex-col justify-between min-h-[380px] border border-brand-orange/20">
-                    <div class="absolute -right-10 -bottom-10 opacity-10 text-[200px] text-brand-orange font-teko font-extrabold select-none">
-                        3X3
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between mb-8">
-                            <span class="text-xs font-bold uppercase tracking-widest text-brand-orange">Next Gen League</span>
-                            <i class="fa-solid fa-basketball text-3xl text-brand-orange"></i>
-                        </div>
-                        <blockquote class="text-xl sm:text-2xl font-bold text-white italic mb-6">
-                            "კალათბურთი არ არის მხოლოდ თამაში, ეს არის ცხოვრების წესი და ხასიათი."
-                        </blockquote>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-brand-orange flex items-center justify-center font-bold text-white">NG</div>
-                        <div>
-                            <div class="font-bold text-white text-sm">Next Gen Event Team</div>
-                            <div class="text-xs text-gray-400">Official Organization</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================== 9. DONATION SECTION ==================== -->
-    <section id="donation" class="py-20 relative bg-[#07090D]">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="glass-card rounded-3xl p-8 sm:p-12 border-2 border-brand-orange/30 text-center relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-40 h-40 bg-brand-orange/10 rounded-full blur-2xl"></div>
-
-                <div class="w-16 h-16 bg-brand-orange/20 rounded-2xl flex items-center justify-center text-brand-orange text-3xl mx-auto mb-6">
-                    <i class="fa-solid fa-hand-holding-dollar"></i>
-                </div>
-
-                <h2 class="font-teko text-5xl sm:text-6xl font-bold uppercase tracking-wide text-white mb-4">
-                    პროექტის <span class="text-brand-orange">განვითარებისთვის</span>
-                </h2>
-
-                <p class="text-gray-300 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed mb-8">
-                    თქვენი ფინანსური მხარდაჭერა გვეხმარება Next Gen Event-ის ტურნირების ხარისხის გაუმჯობესებაში, ახალგაზრდა სპორტსმენების წახალისებასა და 3x3 კალათბურთის განვითარებაში.
-                </p>
-
-                <!-- Bank Account Card -->
-                <div class="max-w-xl mx-auto bg-brand-card p-6 rounded-2xl border border-brand-cardBorder flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="text-left w-full sm:w-auto">
-                        <span class="text-xs text-gray-400 uppercase tracking-widest block mb-1">თიბისი ბანკი (TBC Bank)</span>
-                        <span id="account-number" class="font-mono text-base sm:text-lg font-bold text-brand-gold tracking-wider">GE85TB7323545064300086</span>
-                    </div>
-                    <button onclick="copyAccountNumber()" class="w-full sm:w-auto px-6 py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-brand-orange/20">
-                        <i class="fa-solid fa-copy"></i>
-                        <span id="copy-btn-text">აკოპირება</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================== 13. FOOTER & SOCIALS ==================== -->
-    <footer id="contact" class="bg-black/90 border-t border-brand-cardBorder pt-16 pb-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-                <!-- Col 1: Brand Info -->
-                <div class="md:col-span-2">
-                    <div class="flex items-center gap-3 mb-4">
-                        <i class="fa-solid fa-basketball text-3xl text-brand-orange"></i>
-                        <span class="font-teko text-4xl font-bold tracking-wide text-white">
-                            NEXT GEN <span class="text-brand-orange">EVENT</span>
-                        </span>
-                    </div>
-                    <p class="text-gray-400 text-sm max-w-sm mb-6">
-                        ოფიციალური 3x3 საკალათბურთო პლატფორმა. ახალი თაობის სპორტსმენების მხარდაჭერა და ტურნირების ორგანიზება.
-                    </p>
-                    <div class="text-xs text-gray-400 space-y-2">
-                        <div><i class="fa-solid fa-envelope text-brand-orange mr-2"></i> nextgenevent357@gmail.com</div>
-                        <div><i class="fa-solid fa-paper-plane text-brand-orange mr-2"></i> მონაწილეთა ინფორმაცია: nikatyupi13@gmail.com</div>
-                    </div>
-                </div>
-
-                <!-- Col 2: Quick Links -->
-                <div>
-                    <h4 class="font-teko text-2xl font-bold text-white uppercase mb-4 tracking-wider">ნავიგაცია</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#about" class="hover:text-brand-orange transition-colors">ჩვენ შესახებ</a></li>
-                        <li><a href="#registration" class="hover:text-brand-orange transition-colors">რეგისტრაცია</a></li>
-                        <li><a href="#stats" class="hover:text-brand-orange transition-colors">სტატისტიკა</a></li>
-                        <li><a href="#donation" class="hover:text-brand-orange transition-colors">მხარდაჭერა</a></li>
-                    </ul>
-                </div>
-
-                <!-- Col 3: Social Media Buttons -->
-                <div>
-                    <h4 class="font-teko text-2xl font-bold text-white uppercase mb-4 tracking-wider">სოციალური ქსელები</h4>
-                    <div class="flex flex-wrap gap-3">
-                        <a href="https://www.instagram.com/event.nextgen?igsh=ODA5dDY0b2J4eWdm" target="_blank" class="w-10 h-10 rounded-xl bg-brand-card border border-brand-cardBorder flex items-center justify-center text-gray-300 hover:text-white hover:bg-gradient-to-tr hover:from-yellow-500 hover:via-red-500 hover:to-purple-500 transition-all">
-                            <i class="fa-brands fa-instagram text-lg"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-xl bg-brand-card border border-brand-cardBorder flex items-center justify-center text-gray-300 hover:text-white hover:bg-blue-600 transition-all opacity-50 cursor-not-allowed" title="Facebook - მალე დაემატება">
-                            <i class="fa-brands fa-facebook-f text-lg"></i>
-                        </a>
-                        <a href="https://www.tiktok.com/@next.gen.event?_r=1&_t=ZS-98xQxsrj7GZ" target="_blank" class="w-10 h-10 rounded-xl bg-brand-card border border-brand-cardBorder flex items-center justify-center text-gray-300 hover:text-white hover:bg-black transition-all">
-                            <i class="fa-brands fa-tiktok text-lg"></i>
-                        </a>
-                        <a href="https://youtube.com/@nextgenevent-w9t?si=QtPEL0JOPiwvo6fJ" target="_blank" class="w-10 h-10 rounded-xl bg-brand-card border border-brand-cardBorder flex items-center justify-center text-gray-300 hover:text-white hover:bg-red-600 transition-all">
-                            <i class="fa-brands fa-youtube text-lg"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pt-8 border-t border-brand-cardBorder text-center text-xs text-gray-500">
-                &copy; 2026 Next Gen Event. ყველა უფლება დაცულია.
-            </div>
-        </div>
-    </footer>
-
-    <!-- ==================== MODALS (ADMIN LOGIN & PLAYER EDIT) ==================== -->
+  <!-- Live Stats Section -->
+  <section id="stats" class="max-w-6xl mx-auto px-4 py-12 border-t border-gray-800">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold uppercase tracking-wide">ტურნირის სტატისტიკა</h2>
+      <button id="add-player-btn" onclick="openAddPlayerModal()" class="hidden bg-orange-500 hover:bg-orange-600 text-xs font-bold px-4 py-2 rounded-lg transition">
+        + მონაცემის დამატება
+      </button>
+    </div>
     
-    <!-- Admin Login Modal -->
-    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-md w-full p-8 rounded-2xl relative border border-brand-orange/40">
-            <button onclick="toggleAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <h3 class="font-teko text-4xl font-bold text-white uppercase mb-2">Host / Admin Login</h3>
-            <p class="text-xs text-gray-400 mb-6">შედით ადმინისტრატორის პაროლით სტატისტიკის სამართავად</p>
-            
-            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
-             <div>
-    <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-2">ელფოსტა</label>
-    <input type="email" id="admin-email" required placeholder="შეიყვანეთ ელფოსტა..." class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white focus:outline-none focus:border-brand-orange text-sm">
-</div>   <div>
-                    <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-2">პაროლი</label>
-                    <input type="password" id="admin-pass" required placeholder="შეიყვანეთ პაროლი..." class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white focus:outline-none focus:border-brand-orange text-sm">
-                </div>
-                <p id="admin-error" class="text-red-500 text-xs hidden">არასწორი პაროლი!</p>
-                <button type="submit" class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all">
-                    შესვლა
-                </button>
-            </form>
-        </div>
+    <div class="bg-gray-800/50 rounded-xl border border-gray-700 overflow-hidden">
+      <table class="w-full text-left text-sm text-gray-300">
+        <thead class="bg-gray-800 text-gray-400 uppercase text-xs">
+          <tr>
+            <th class="p-4">გუნდი / მოთამაშე</th>
+            <th class="p-4">კატეგორია</th>
+            <th class="p-4">ქულა / სტატისტიკა</th>
+            <th id="admin-actions-head" class="p-4 text-right hidden">მოქმედება</th>
+          </tr>
+        </thead>
+        <tbody id="players-table-body" class="divide-y divide-gray-700">
+          <!-- Data rendered via JavaScript -->
+        </tbody>
+      </table>
     </div>
+  </section>
 
-    <!-- Player Add/Edit Modal -->
-    <div id="player-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-lg w-full p-8 rounded-2xl relative border border-brand-orange/40">
-            <button onclick="closePlayerModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <h3 id="modal-title" class="font-teko text-4xl font-bold text-white uppercase mb-6">მოთამაშის მართვა</h3>
-            
-            <form onsubmit="savePlayer(event)" class="space-y-4">
-                <input type="hidden" id="player-id">
-                <div>
-                    <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">სახელი და გვარი</label>
-                    <input type="text" id="player-name" required class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white focus:outline-none focus:border-brand-orange text-sm">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">ქულები (PTS)</label>
-                        <input type="number" id="player-pts" required min="0" class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white focus:outline-none focus:border-brand-orange text-sm">
-                    </div>
-                    <div>
-                        <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">მოგება (W)</label>
-                        <input type="number" id="player-wins" required min="0" class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white focus:outline-none focus:border-brand-orange text-sm">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">წაგება (L)</label>
-                        <input type="number" id="player-losses" required min="0" class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white focus:outline-none focus:border-brand-orange text-sm">
-                    </div>
-                    <div>
-                        <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">თამაშები (GP)</label>
-                        <input type="number" id="player-gp" required min="0" class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white focus:outline-none focus:border-brand-orange text-sm">
-                    </div>
-                </div>
-                <button type="submit" class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all mt-4">
-                    შენახვა
-                </button>
-            </form>
-        </div>
+<!-- Registration Form Section -->
+  <section id="register" class="max-w-4xl mx-auto px-4 py-12 border-t border-gray-800 text-center">
+    <h2 class="text-2xl font-bold uppercase tracking-wide mb-2">ონლაინ რეგისტრაცია</h2>
+    <p class="text-gray-400 text-sm mb-8">აირჩიეთ თქვენი ასაკობრივი კატეგორია და შეავსეთ ფორმა:</p>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <!-- U16 -->
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLScpcdfRnwlGVCQd2uNGOVq4NQ07LMEti7rb1UbYiJWrYMILzg/viewform?usp=header" target="_blank" class="bg-gray-800 hover:bg-orange-500 border border-gray-700 p-5 rounded-xl font-bold transition flex flex-col items-center">
+        <i class="fa-solid fa-basketball text-2xl text-orange-400 mb-2"></i>
+        <span>U16</span>
+      </a>
+
+      <!-- U18 -->
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLScNjvPOUehT8LS5bXi7c2eujbloqDm5Fj_e6PqfgPdEmtYZNQ/viewform?usp=header" target="_blank" class="bg-gray-800 hover:bg-orange-500 border border-gray-700 p-5 rounded-xl font-bold transition flex flex-col items-center">
+        <i class="fa-solid fa-basketball text-2xl text-orange-400 mb-2"></i>
+        <span>U18</span>
+      </a>
+
+      <!-- 18+ -->
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeX0VkRscqWNt73s1sKUtdjNm1z6WlH_bFGWklWXFrnMAW8Yg/viewform?usp=header" target="_blank" class="bg-gray-800 hover:bg-orange-500 border border-gray-700 p-5 rounded-xl font-bold transition flex flex-col items-center">
+        <i class="fa-solid fa-trophy text-2xl text-orange-400 mb-2"></i>
+        <span>18+</span>
+      </a>
+
+      <!-- ქალები -->
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLScKIM0Xz8iZDDZNEEBxoiOh9HUMezfUiAypG52x2WWmNUNpNg/viewform?usp=header" target="_blank" class="bg-gray-800 hover:bg-orange-500 border border-gray-700 p-5 rounded-xl font-bold transition flex flex-col items-center">
+        <i class="fa-solid fa-users text-2xl text-orange-400 mb-2"></i>
+        <span>ქალები</span>
+      </a>
     </div>
-<!-- Registration Modal -->
-<div id="registration-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="glass-card max-w-lg w-full p-8 rounded-2xl relative border border-brand-orange/40 max-h-[90vh] overflow-y-auto">
-        <button type="button" onclick="closeRegistrationModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
-            <i class="fa-solid fa-xmark"></i>
+  </section>
+
+  <!-- Host Login Modal -->
+  <div id="admin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl w-full max-w-md relative">
+      <button onclick="toggleAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+      <h3 class="text-xl font-bold mb-4">Host / Admin Login</h3>
+      <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs uppercase font-bold text-gray-400 mb-1">ელფოსტა</label>
+          <input type="email" id="admin-email" required class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:border-orange-500">
+        </div>
+        <div>
+          <label class="block text-xs uppercase font-bold text-gray-400 mb-1">პაროლი</label>
+          <input type="password" id="admin-pass" required class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:border-orange-500">
+        </div>
+        <p id="admin-error" class="text-red-500 text-xs hidden">არასწორი ელფოსტა ან პაროლი!</p>
+        <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-3 rounded-lg text-sm transition">
+          შესვლა
         </button>
-
-        <h3 class="font-teko text-4xl font-bold text-white uppercase mb-6">
-            რეგისტრაცია
-        </h3>
-
-        <form onsubmit="submitRegistration(event)" class="space-y-4">
-            <input type="hidden" id="registration-category">
-
-            <div>
-                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
-                    კატეგორია
-                </label>
-                <input type="text" id="registration-category-display" readonly
-                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
-            </div>
-
-            <div>
-                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
-                    გუნდის სახელი
-                </label>
-                <input type="text" id="registration-team" required
-                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
-            </div>
-
-            <div>
-                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
-                    მოთამაშე 1
-                </label>
-                <input type="text" id="registration-player1" required
-                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
-            </div>
-
-            <div>
-                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
-                    მოთამაშე 2
-                </label>
-                <input type="text" id="registration-player2" required
-                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
-            </div>
-
-            <div>
-                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
-                    მოთამაშე 3
-                </label>
-                <input type="text" id="registration-player3" required
-                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
-            </div>
-
-            <div>
-                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
-                    მოთამაშე 4
-                </label>
-                <input type="text" id="registration-player4" required
-                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
-            </div>
-
-            <div>
-                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
-                    ელფოსტა
-                </label>
-                <input type="email" id="registration-email" required
-                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
-            </div>
-
-            <div>
-                <label class="text-xs text-gray-400 uppercase font-bold tracking-wider block mb-1">
-                    ტელეფონი
-                </label>
-                <input type="tel" id="registration-phone" required
-                    class="w-full bg-brand-card border border-brand-cardBorder rounded-xl p-3 text-white text-sm">
-            </div>
-
-            <button type="submit"
-                class="w-full py-3 bg-brand-orange hover:bg-brand-orangeDark text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all mt-4">
-                რეგისტრაციის გაგზავნა
-            </button>
-        </form>
+      </form>
     </div>
-</div>
-    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
-    <script>
-        // 1. Loading Screen Animation
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('loading-screen');
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 700);
-            }, 1200);
-        });
+  </div>
 
-        // Mobile Menu Toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
+  <!-- Add/Edit Player Modal -->
+  <div id="player-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl w-full max-w-md relative">
+      <button onclick="closePlayerModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+      <h3 id="modal-title" class="text-xl font-bold mb-4">სტატისტიკის დამატება</h3>
+      <form onsubmit="savePlayer(event)" class="space-y-4">
+        <input type="hidden" id="player-id">
+        <div>
+          <label class="block text-xs uppercase font-bold text-gray-400 mb-1">გუნდი / სახელი</label>
+          <input type="text" id="player-name" required class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:border-orange-500">
+        </div>
+        <div>
+          <label class="block text-xs uppercase font-bold text-gray-400 mb-1">კატეგორია</label>
+          <input type="text" id="player-category" placeholder="მაგ: U18, +18" required class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:border-orange-500">
+        </div>
+<button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-3 rounded-lg text-sm transition">
+          შენახვა
+        </button>
+      </form>
+    </div>
+  </div>
 
-        // 2. Initial Player Data (Stored in LocalStorage for Admin Editing)
-        const SUPABASE_URL = "https://urpsyylhhawzfhjrktcx.supabase.co";
-const SUPABASE_KEY = "sb_publishable_2O1_m1NQgq3801jlw5yL-g_agtsZKoV";
+  <!-- JavaScript Logic -->
+  <script>
+    // ადმინის მონაცემები (შეცვალეთ სურვილისამებრ)
+    const ADMIN_EMAIL = "nikatyupi13@gmail.com";
+    const ADMIN_PASSWORD = "გნგნ1818";
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+    let isAdmin = false;
+    let players = JSON.parse(localStorage.getItem('nextgen_players')) || [
+      { id: 1, name: "დინამო 3x3", category: "+18", score: "125 ქულა" },
+      { id: 2, name: "ქორები U18", category: "U18", score: "98 ქულა" }
+    ];
 
-const initialPlayers = [
-   
-            
-        ];
-
-        let players = JSON.parse(localStorage.getItem('nextgen_players')) || initialPlayers;
-        let isAdmin = false;
-
-        function saveToStorage() {
-            localStorage.setItem('nextgen_players', JSON.stringify(players));
-        }
-
-        // Render Statistics Table
-        function renderPlayersTable() {
-            const tbody = document.getElementById('players-table-body');
-            const searchVal = document.getElementById('player-search').value.toLowerCase();
-            tbody.innerHTML = '';
-
-            // Sort Players by Points (PTS) descending
-            const sortedPlayers = [...players].sort((a, b) => b.pts - a.pts);
-
-            const filtered = sortedPlayers.filter(p => p.name.toLowerCase().includes(searchVal));
-
-            filtered.forEach((player, index) => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-brand-cardBorder/50 transition-colors";
-
-                // Ranking style
-                let rankBadge = `<span class="text-gray-400 font-bold">#${index + 1}</span>`;
-                if (index === 0) rankBadge = `<span class="w-7 h-7 rounded-full bg-brand-gold/20 text-brand-gold flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-crown"></i></span>`;
-                if (index === 1) rankBadge = `<span class="w-7 h-7 rounded-full bg-gray-300/20 text-gray-300 flex items-center justify-center font-bold text-xs">2</span>`;
-                if (index === 2) rankBadge = `<span class="w-7 h-7 rounded-full bg-amber-700/20 text-amber-600 flex items-center justify-center font-bold text-xs">3</span>`;
-
-                tr.innerHTML = `
-                    <td class="p-4 sm:p-6">${rankBadge}</td>
-                    <td class="p-4 sm:p-6 text-white font-bold">${player.name}</td>
-                    <td class="p-4 sm:p-6 text-center text-brand-orange font-bold font-mono">${player.pts}</td>
-                    <td class="p-4 sm:p-6 text-center text-green-400 font-mono">${player.wins}</td>
-                    <td class="p-4 sm:p-6 text-center text-red-400 font-mono">${player.losses}</td>
-                    <td class="p-4 sm:p-6 text-center text-gray-300 font-mono">${player.gp}</td>
-                    ${isAdmin ? `
-                        <td class="p-4 sm:p-6 text-right space-x-2">
-                            <button onclick="openEditPlayerModal(${player.id})" class="text-brand-gold hover:text-white px-2 py-1"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deletePlayer(${player.id})" class="text-red-500 hover:text-white px-2 py-1"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    ` : ''}
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        // 3. Admin Authentication Logic
-        function toggleAdminModal() {
-            document.getElementById('admin-modal').classList.toggle('hidden');
-        }
-
-       async function handleAdminLogin(e) {if (email !== "nikatyupi13@gmail.com" || password !== "გნგნ1818") {
-    document.getElementById('admin-error').innerText = "არასწორი ელფოსტა ან პაროლი!";
-    document.getElementById('admin-error').classList.remove('hidden');
-    return;
-
+    function renderPlayers() {
+      const tbody = document.getElementById('players-table-body');
+      tbody.innerHTML = '';
+      players.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="p-4 font-semibold text-white">${p.name}</td>
+          <td class="p-4 text-gray-400">${p.category}</td>
+          <td class="p-4 font-bold text-orange-400">${p.score}</td>
+          ${isAdmin ? `
+            <td class="p-4 text-right space-x-2">
+              <button onclick="editPlayer(${p.id})" class="text-gray-400 hover:text-white"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="deletePlayer(${p.id})" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          ` : ''}
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
-    isAdmin = true;
-    document.getElementById('admin-error').classList.add('hidden');
-    document.getElementById('add-player-btn').classList.remove('hidden');
-    document.getElementById('admin-header').classList.remove('hidden');
-
-    toggleAdminModal();
-    renderPlayersTable();
-
-    alert("წარმატებული ავტორიზაცია! თქვენ გაქვთ Host/Admin წვდომა.");
-}
-        // 4. Admin CRUD Actions (Add/Edit/Delete)
-        function openAddPlayerModal() {
-            document.getElementById('modal-title').innerText = "ახალი მოთამაშის დამატება";
-            document.getElementById('player-id').value = "";
-            document.getElementById('player-name').value = "";
-            document.getElementById('player-pts').value = 0;
-            document.getElementById('player-wins').value = 0;
-            document.getElementById('player-losses').value = 0;
-            document.getElementById('player-gp').value = 0;
-            document.getElementById('player-modal').classList.remove('hidden');
-        }
-
-        function openEditPlayerModal(id) {
-            const player = players.find(p => p.id === id);
-            if (!player) return;
-            document.getElementById('modal-title').innerText = "მოთამაშის რედაქტირება";
-            document.getElementById('player-id').value = player.id;
-            document.getElementById('player-name').value = player.name;
-            document.getElementById('player-pts').value = player.pts;
-            document.getElementById('player-wins').value = player.wins;
-            document.getElementById('player-losses').value = player.losses;
-            document.getElementById('player-gp').value = player.gp;
-            document.getElementById('player-modal').classList.remove('hidden');
-        }
-
-        function closePlayerModal() {
-            document.getElementById('player-modal').classList.add('hidden');
-        }
-function openRegistrationModal(category) {
-    document.getElementById('registration-category').value = category;
-    document.getElementById('registration-category-display').value = category;
-    document.getElementById('registration-modal').classList.remove('hidden');
-}
-
-function closeRegistrationModal() {
-    document.getElementById('registration-modal').classList.add('hidden');
-}
-
-async function submitRegistration(event) {
-    event.preventDefault();
-
-    const { error } = await supabaseClient
-       .from('registration')
-        .insert([{
-            category: document.getElementById('registration-category').value,
-            team_name: document.getElementById('registration-team').value,
-            player1: document.getElementById('registration-player1').value,
-            player2: document.getElementById('registration-player2').value,
-            player3: document.getElementById('registration-player3').value,
-            player4: document.getElementById('registration-player4').value,
-            email: document.getElementById('registration-email').value,
-            phone: document.getElementById('registration-phone').value,
-            status: 'pending'
-        }]);
-
-    if (error) {
-        alert('Supabase error: ' + error.message);
-        console.error(error);
-        return;
+    function toggleAdminModal() {
+      document.getElementById('admin-modal').classList.toggle('hidden');
     }
 
-    alert('რეგისტრაცია წარმატებით გაიგზავნა!');
-    closeRegistrationModal();
-    event.target.reset();
-}
-        function savePlayer(e) {
-            e.preventDefault();
-            const id = document.getElementById('player-id').value;
-            const name = document.getElementById('player-name').value;
-            const pts = parseInt(document.getElementById('player-pts').value);
-            const wins = parseInt(document.getElementById('player-wins').value);
-            const losses = parseInt(document.getElementById('player-losses').value);
-            const gp = parseInt(document.getElementById('player-gp').value);
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('admin-email').value;
+      const pass = document.getElementById('admin-pass').value;
 
-            if (id) {
-                // Update
-                const p = players.find(x => x.id == id);
-                if (p) {
-                    p.name = name; p.pts = pts; p.wins = wins; p.losses = losses; p.gp = gp;
-                }
-            } else {
-                // Create
-                players.push({ id: Date.now(), name, pts, wins, losses, gp });
-            }
+      if (email === ADMIN_EMAIL && pass === ADMIN_PASSWORD) {
+        isAdmin = true;
+        document.getElementById('admin-error').classList.add('hidden');
+        document.getElementById('add-player-btn').classList.remove('hidden');
+        document.getElementById('admin-actions-head').classList.remove('hidden');
+        toggleAdminModal();
+        renderPlayers();
+        alert('ავტორიზაცია წარმატებით გაიარა!');
+      } else {
+        document.getElementById('admin-error').classList.remove('hidden');
+      }
+    }
 
-            saveToStorage();
-            renderPlayersTable();
-            closePlayerModal();
-        }
+    function openAddPlayerModal() {
+      document.getElementById('player-id').value = '';
+      document.getElementById('player-name').value = '';
+      document.getElementById('player-category').value = '';
+      document.getElementById('player-score').value = '';
+      document.getElementById('modal-title').innerText = "სტატისტიკის დამატება";
+      document.getElementById('player-modal').classList.remove('hidden');
+    }
 
-        function deletePlayer(id) {
-            if (confirm("ნამდვილად გსურთ ამ მოთამაშის წაშლა?")) {
-                players = players.filter(p => p.id !== id);
-                saveToStorage();
-                renderPlayersTable();
-            }
-        }
+    function closePlayerModal() {
+      document.getElementById('player-modal').classList.add('hidden');
+    }
 
-        // 5. Copy Bank Account Number Functionality
-        function copyAccountNumber() {
-            const accNum = document.getElementById('account-number').innerText;
-            navigator.clipboard.writeText(accNum).then(() => {
-                const btnText = document.getElementById('copy-btn-text');
-                btnText.innerText = "დაკოპირდა!";
-                setTimeout(() => {
-                    btnText.innerText = "აკოპირება";
-                }, 2000);
-            });
-        }
+    function savePlayer(e) {
+      e.preventDefault();
+      const id = document.getElementById('player-id').value;
+      const name = document.getElementById('player-name').value;
+      const category = document.getElementById('player-category').value;
+      const score = document.getElementById('player-score').value;
 
-        // Initial Table Render
-        renderPlayersTable();
-    </script>
+      if (id) {
+        const p = players.find(x => x.id == id);
+        if (p) { p.name = name; p.category = category; p.score = score; }
+      } else {
+        players.push({ id: Date.now(), name, category, score });
+      }
+
+      localStorage.setItem('nextgen_players', JSON.stringify(players));
+      closePlayerModal();
+      renderPlayers();
+    }
+
+    function editPlayer(id) {
+      const p = players.find(x => x.id == id);
+      if (!p) return;
+      document.getElementById('player-id').value = p.id;
+      document.getElementById('player-name').value = p.name;
+      document.getElementById('player-category').value = p.category;
+      document.getElementById('player-score').value = p.score;
+      document.getElementById('modal-title').innerText = "სტატისტიკის რედაქტირება";
+      document.getElementById('player-modal').classList.remove('hidden');
+    }
+
+    function deletePlayer(id) {
+      if (confirm('ნამდვილად გსურთ წაშლა?')) {
+        players = players.filter(x => x.id != id);
+        localStorage.setItem('nextgen_players', JSON.stringify(players));
+        renderPlayers();
+      }
+    }
+
+    // Initial Render
+    renderPlayers();
+  </script>
 </body>
-          </html>
+</html>
